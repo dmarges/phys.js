@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <canvas id="play"></canvas>
+
+        <script src="js/phys.js"></script>
+        <script>
+
+            var canvas = document.getElementById('play');
+            var ctx = canvas.getContext('2d');
+            ctx.canvas.width = 1024;
+            ctx.canvas.height = 768;
+            var that = this;
+            PhysJS.objects.push({name: 'player', x: 400, y: 600, width: 143, height: 143, radius: 72, vX: 10, vY: 0, aX: 1, aY: 1, mass: 10});
+            PhysJS.objects.push({name: 'player2', x: 100, y: 600, width: 143, height: 143, radius: 72, vX: 10, vY: 1, aX: 1, aY: 1, mass: 10});
+
+            PhysJS.objects.push({name: 'top-wall', x: 0, y: 0, width: 1024, height: 20, radius: 72, vX: 0, vY: 0, aX: 0, aY: 0, mass: 10});
+            PhysJS.objects.push({name: 'bottom-wall', x: 0, y: 748, width: 1024, height: 20, radius: 0, vX: 0, vY: 0, aX: 0, aY: 0, mass: 10});
+            PhysJS.objects.push({name: 'left-wall', x: 0, y: 0, width: 20, height: 760, radius: 0, vX: 0, vY: 0, aX: 0, aY: 0, mass: 10});
+            PhysJS.objects.push({name: 'right-wall', x: 1004, y: 0, width: 20, height: 760, radius: 0, vX: 0, vY: 0, aX: 0, aY: 0, mass: 10});
+
+            var testCircle = PhysJS.objects[0];
+            var testCircle2 = PhysJS.objects[1];
+
+            var topWall = PhysJS.objects[2];
+            var bottomWall = PhysJS.objects[3];
+            var leftWall = PhysJS.objects[4];
+            var rightWall = PhysJS.objects[5];
+
+            render();
+
+            function render() {
+                PhysJS.calculateFriction(testCircle);
+                PhysJS.calculateFriction(testCircle2);
+                PhysJS.detectCollision(testCircle, testCircle2);
+                PhysJS.wallCollision(testCircle);
+                PhysJS.wallCollision(testCircle2);
+                
+                ctx.clearRect(0, 0, 1024, 768);
+                ctx.fillStyle = 'red';
+                ctx.beginPath();
+                ctx.arc(testCircle.x += testCircle.vX, testCircle.y += testCircle.vY, testCircle.radius, 0, (Math.PI * 2), false);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = 'blue';
+                ctx.beginPath();
+                //console.log(testCircle2.y);
+                ctx.arc(testCircle2.x += testCircle2.vX, testCircle2.y += testCircle2.vY, testCircle2.radius, 0, (Math.PI * 2), false);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.rect(topWall.x, topWall.y, topWall.width, topWall.height);
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.rect(bottomWall.x, bottomWall.y, bottomWall.width, bottomWall.height);
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.rect(leftWall.x, leftWall.y, leftWall.width, leftWall.height);
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.rect(rightWall.x, rightWall.y, rightWall.width, rightWall.height);
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'black';
+                ctx.stroke();
+
+                webkitRequestAnimationFrame(function() {
+                    that.render();
+                });
+            }
+        </script>
+    </body>
+</html>
